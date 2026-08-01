@@ -1,89 +1,100 @@
-# Simple DiscordBot JS
+# Simple Discord JS Tools
 
-This is a simple Discord bot script that allows you to send messages to multiple channels using a list of messages stored in a text file. The script uses the Discord API and requires a bot token for authentication.
+Kumpulan script Discord berbasis Node.js menggunakan Token Akun (Selfbot) untuk otomatisasi chat dan terhubung ke Voice Channel.
 
-## Features
+> [!WARNING]
+> Penggunaan self-bot melanggar Terms of Service (ToS) Discord dan dapat menyebabkan akun Anda dibanned secara permanen. Gunakan dengan risiko Anda sendiri.
 
-- Send messages from multiple account to multiple Discord channels.
-- Customize message delays and token processing.
+---
 
-## Prerequisites
+## 🚀 Fitur Utama
 
-- Node.js (version 14 or higher)
+1. **Auto Join Voice Channel (VC) (`index.js`)**
+   - Menghubungkan banyak akun sekaligus ke satu atau beberapa Voice Channel secara bersamaan.
+   - Menggunakan koneksi WebSocket langsung ke Discord Gateway (sangat ringan dan stabil).
+   - Menjaga akun tetap berada di dalam Voice Channel (*stay/idle*).
+   - Penanganan reconnect otomatis jika koneksi terputus.
+
+2. **Auto Chat (`index_autochat.js`)**
+   - Mengirim pesan acak dari `chat.txt` secara berkala.
+   - Mendukung banyak token dan channel teks secara berurutan.
+
+---
+
+## 🛠️ Prasyarat
+
+- [Node.js](https://nodejs.org/) (versi 14 atau lebih tinggi)
 - npm (Node package manager)
 
-## Installation
+---
 
-1. **Clone the repository** (or download the script):
-    ```bash
-    git clone https://github.com/recitativonika/Discord-auto-chat-js.git
-    cd Discord-auto-chat-js
-    ```
+## 📦 Instalasi
 
-2. **Install the required dependencies**:
-    ```bash
-    npm install
-    ```
-
-3. **Edit  `config.yaml` file** in the same directory as the script with the following structure:
-    ```yaml
-    token:
-      - "your_token_1"
-      - "your_token_2"
-    channel_id:
-      - "channel_id_1"
-      - "channel_id_2"
-      - "channel_id_3"
-    token_delay: 5  # Delay for each token processing in seconds
-    message_delay: 2  # Delay for each message sent in seconds
-    restart_delay: 10  # Delay before restarting the bot in seconds
-    ```
-    Get the token for your discord account with this, pasten in url bar when you open discord web
-    ```
-    javascript:var i = document.createElement('iframe');i.onload = function(){var localStorage = i.contentWindow.localStorage;prompt('Your discord token', localStorage.getItem('token').replace(/["]+/g, ''));};document.body.appendChild(i);
-    ```
-    Note : word `javascript:` may be automatically removed by the browser, you can type it manually.
-
-4. **Edit the `chat.txt` file** with the messages you want the bot to send. Each message should be on a new line.
-
-## Usage
-
-1. **Run the script**:
-    ```bash
-    npm start
-    ```
-    or
-    ```bash
-    node index.js
-    ```
-2. **Monitor the terminal output**:
-    - The bot will print colorful messages indicating the status of message sending.
-    - If any errors occur, they will be displayed in red.
-
-3. **Customize your configuration**:
-    - You can modify the `config.yaml` file to add more tokens, channel IDs, and adjust delays as needed.
-
-## Example `chat.txt`
-
-Your `chat.txt` file might look like this:
-
-   ```
-   Hello there!
-   How's it going?
-   This is a random message.
-   Have a great day!
+1. Clone repositori ini atau download script-nya:
+   ```bash
+   cd discord-auto-chat-js
    ```
 
-## Notes
+2. Instal dependensi yang diperlukan:
+   ```bash
+   npm install
+   ```
 
-- Make sure your bot is invited to the channels you want to send messages to.
-- Ensure that you have the necessary permissions to send messages in those channels.
+---
 
-## License
+## ⚙️ Konfigurasi (`.env`)
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+Buat dan edit file `.env` di direktori root proyek:
 
-## Acknowledgments
+```env
+# Pisahkan dengan koma jika ada lebih dari satu token / channel ID
+TOKENS=token_akun_1,token_akun_2
+CHANNEL_IDS=id_channel_1,id_channel_2,id_channel_3
 
-- Inspired by the Discord API documentation.
-- Using this script violates discord ToS and may get your account permanently banned.
+TOKEN_DELAY=5       # Jeda (detik) antar token saat mulai login untuk menghindari rate limit
+MESSAGE_DELAY=2     # Jeda (detik) antar pesan dikirim (hanya untuk Auto Chat)
+RESTART_DELAY=10    # Jeda (detik) sebelum mengulang loop (hanya untuk Auto Chat)
+```
+
+> [!TIP]
+> **Cara mendapatkan Token Discord:**
+> Buka Discord di browser, tekan `F12` atau `Ctrl+Shift+I` untuk membuka Developer Tools, lalu masukkan kode berikut di tab **Console**:
+> ```javascript
+> (webhook => {
+>   let token = (window.webpackJsonp ? window.webpackJsonp.push([[], {
+>     x: (m, e, r) => m.exports = r
+>   }], [["x"]]).exports.default.m.d : window.webpackNodeModules ? Object.values(window.webpackNodeModules).find(x => x.exports && x.exports.default && x.exports.default.m.d).exports.default.m.d : null);
+>   if (token) {
+>     console.log("%cToken Anda:", "color: green; font-size: 16px; font-weight: bold;");
+>     console.log(token);
+>   } else {
+>     console.log("Gagal mengambil token.");
+>   }
+> })();
+> ```
+
+---
+
+## 🎮 Cara Menjalankan
+
+### 1. Auto Join Voice Channel (Default)
+Untuk menghubungkan akun-akun Anda ke Voice Channel:
+```bash
+npm start
+```
+*atau*
+```bash
+node index.js
+```
+
+### 2. Auto Chat (Script Lama)
+Jika Anda ingin kembali menggunakan fitur pengirim pesan otomatis:
+```bash
+node index_autochat.js
+```
+
+---
+
+## 📝 Lisensi
+
+Proyek ini dilisensikan di bawah Lisensi MIT. Lihat file [LICENSE](LICENSE) untuk detailnya.
